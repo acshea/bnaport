@@ -117,6 +117,18 @@ describe('MyContract', () => {
                 );
             });
         });
+
+        describe('#existsTrader', () => {
+            it('should call CRUDTrader with exists params', async () => {
+                await contract.existsTrader(ctx, trader.tradeId);
+
+                expect(mockedCRUDTrader).to.have.been.calledOnceWithExactly(
+                    ctx,
+                    `{"${TraderIdField}": "${trader.tradeId}"}`,
+                    'e'
+                );
+            });
+        });
     });
 
     describe('Commodity', () => {
@@ -187,6 +199,18 @@ describe('MyContract', () => {
                     ctx,
                     `{"${CommodityIdField}": "${commodity.tradingSymbol}"}`,
                     'r'
+                );
+            });
+        });
+
+        describe('#existsCommodity', () => {
+            it('should call CRUDCommodity with exists params', async () => {
+                await contract.existsCommodity(ctx, commodity.tradingSymbol);
+
+                expect(mockedCRUDCommodity).to.have.been.calledOnceWithExactly(
+                    ctx,
+                    `{"${CommodityIdField}": "${commodity.tradingSymbol}"}`,
+                    'e'
                 );
             });
         });

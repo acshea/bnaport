@@ -1,8 +1,6 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
+    "extends": ["tslint:recommended"],
     "jsRules": {},
     "rules": {
         "no-unused-variable": true,
@@ -16,6 +14,7 @@
         "no-string-throw": true,
         "no-var-keyword": true,
         "no-trailing-whitespace": true,
+        "trailing-comma": false,
         "object-literal-key-quotes": [true, "as-needed"],
         "max-line-length": false
     },
