@@ -26,7 +26,12 @@ import * as os from 'os';
 import * as path from 'path';
 import { URL } from 'url';
 
-import { Trader, TraderClass } from '../../model/trade-model';
+import {
+    Commodity,
+    CommodityClass,
+    Trader,
+    TraderClass
+} from '../../model/trade-model';
 
 describe('MyContract-trade-network@0.0.1', () => {
     const homedir: string = os.homedir();
@@ -48,6 +53,15 @@ describe('MyContract-trade-network@0.0.1', () => {
         firstName: 'aFirstName',
         lastName: 'aLastName',
         tradeId: new Date().toISOString()
+    };
+
+    const commodity: Commodity = {
+        $class: CommodityClass,
+        description: 'aDescription',
+        mainExchange: 'anExchange',
+        owner: 'ownerId',
+        quantity: 123,
+        tradingSymbol: new Date().toISOString()
     };
 
     before(async () => {
@@ -157,64 +171,64 @@ describe('MyContract-trade-network@0.0.1', () => {
         assert.equal(responseAsArray[2].data, 'DELETED');
     }).timeout(10000);
 
-    xit('addCommodity', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('addCommodity', async () => {
+        const args: string[] = [JSON.stringify(commodity)];
+        const response = await submitTransaction('addCommodity', args);
+        const responseAsString = JSON.stringify(
+            JSON.parse(response.toString())
+        );
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        assert.equal(responseAsString, JSON.stringify(commodity));
     }).timeout(10000);
 
-    xit('updateCommodity', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('updateCommodity', async () => {
+        commodity.description = 'aNewDescription';
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        const args: string[] = [JSON.stringify(commodity)];
+        const response = await submitTransaction('updateCommodity', args);
+        const responseAsString = JSON.stringify(
+            JSON.parse(response.toString())
+        );
+
+        assert.equal(responseAsString, JSON.stringify(commodity));
     }).timeout(10000);
 
-    xit('deleteCommodity', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('existsCommodity', async () => {
+        const args: string[] = [commodity.tradingSymbol];
+        const response = await submitTransaction('existsCommodity', args);
+        const responseAsString = JSON.parse(response.toString());
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        assert.equal(responseAsString, true);
     }).timeout(10000);
 
-    xit('getCommodity', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('getCommodity', async () => {
+        const args: string[] = [commodity.tradingSymbol];
+        const response = await submitTransaction('getCommodity', args);
+        const responseAsString = JSON.stringify(
+            JSON.parse(response.toString())
+        );
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        assert.equal(responseAsString, JSON.stringify(commodity));
     }).timeout(10000);
 
-    xit('getCommodityHistory', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('deleteCommodity', async () => {
+        const args: string[] = [commodity.tradingSymbol];
+        const response = await submitTransaction('deleteCommodity', args);
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        // Make sure the response is zero length i.e. doesn't have an error
+        assert.equal(response.length, 0);
     }).timeout(10000);
 
-    xit('existsCommodity', async () => {
-        // TODO: Update with parameters of transaction
-        const args: string[] = [];
+    it('getCommodityHistory', async () => {
+        const args: string[] = [commodity.tradingSymbol];
+        const response = await submitTransaction('getCommodityHistory', args);
+        const responseAsArray = JSON.parse(response.toString());
 
-        // submitTransaction returns buffer of transcation return value
-        // TODO: Update with return value of transaction
-        assert.equal(true, true);
-        // assert.equal(JSON.parse(response.toString()), undefined);
+        assert.equal(
+            JSON.stringify(responseAsArray[1].data),
+            JSON.stringify(commodity)
+        );
+        assert.equal(responseAsArray[2].data, 'DELETED');
     }).timeout(10000);
 
     xit('CRUDTrader', async () => {
